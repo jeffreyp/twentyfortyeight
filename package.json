@@ -1,0 +1,14 @@
+{
+  "name": "twentyfortyeight",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A mobile-friendly web version of the 2048 puzzle game.",
+  "homepage": "https://jeffreyp.github.io/twentyfortyeight",
+  "scripts": {
+    "start": "npx --yes serve public",
+    "deploy": "gh-pages -d public"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
+  }
+}
