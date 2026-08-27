@@ -140,8 +140,8 @@ html, body {
 
 .tile {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: var(--gap);
+  left: var(--gap);
   width: var(--tile-size, 25%);
   height: var(--tile-size, 25%);
   transform: translate(calc(var(--col, 0) * var(--cell-total, 0px)), calc(var(--row, 0) * var(--cell-total, 0px)));
