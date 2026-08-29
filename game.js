@@ -1,9 +1,16 @@
 (function () {
   "use strict";
 
-  var SIZE = 4;
+  var DIFFICULTIES = {
+    easy: { size: 5, bestScoreKey: "2048-best-score-easy" },
+    medium: { size: 4, bestScoreKey: "2048-best-score" },
+    hard: { size: 3, bestScoreKey: "2048-best-score-hard" },
+  };
+  var DIFFICULTY_KEY = "2048-difficulty";
   var TRANSITION_MS = 130;
-  var BEST_SCORE_KEY = "2048-best-score";
+
+  var SIZE = 4;
+  var difficulty = "medium";
 
   var els = {
     gridBackground: document.getElementById("grid-background"),
@@ -16,7 +23,10 @@
     newGameBtn: document.getElementById("new-game"),
     retryBtn: document.getElementById("retry-button"),
     keepPlayingBtn: document.getElementById("keep-playing-button"),
+    difficultyRow: document.getElementById("difficulty-row"),
   };
+
+  var difficultyButtons = els.difficultyRow.querySelectorAll(".difficulty-button");
 
   var tiles = [];
   var tileEls = new Map();
@@ -30,7 +40,7 @@
 
   function getBestScore() {
     try {
-      return parseInt(localStorage.getItem(BEST_SCORE_KEY), 10) || 0;
+      return parseInt(localStorage.getItem(DIFFICULTIES[difficulty].bestScoreKey), 10) || 0;
     } catch (e) {
       return 0;
     }
@@ -38,10 +48,37 @@
 
   function setBestScore(value) {
     try {
-      localStorage.setItem(BEST_SCORE_KEY, String(value));
+      localStorage.setItem(DIFFICULTIES[difficulty].bestScoreKey, String(value));
     } catch (e) {
       /* ignore (private mode / storage disabled) */
     }
+  }
+
+  function getStoredDifficulty() {
+    try {
+      var stored = localStorage.getItem(DIFFICULTY_KEY);
+      return DIFFICULTIES[stored] ? stored : "medium";
+    } catch (e) {
+      return "medium";
+    }
+  }
+
+  function setStoredDifficulty(value) {
+    try {
+      localStorage.setItem(DIFFICULTY_KEY, value);
+    } catch (e) {
+      /* ignore (private mode / storage disabled) */
+    }
+  }
+
+  function applyDifficulty(value) {
+    difficulty = DIFFICULTIES[value] ? value : "medium";
+    SIZE = DIFFICULTIES[difficulty].size;
+    els.gridBackground.style.setProperty("--size", SIZE);
+    difficultyButtons.forEach(function (btn) {
+      btn.classList.toggle("active", btn.dataset.difficulty === difficulty);
+    });
+    buildBackground();
   }
 
   function buildBackground() {
@@ -119,8 +156,12 @@
   }
 
   function buildTraversals(vector) {
-    var rows = [0, 1, 2, 3];
-    var cols = [0, 1, 2, 3];
+    var rows = [];
+    var cols = [];
+    for (var i = 0; i < SIZE; i++) {
+      rows.push(i);
+      cols.push(i);
+    }
     if (vector.y === 1) rows.reverse();
     if (vector.x === 1) cols.reverse();
     return { rows: rows, cols: cols };
@@ -397,9 +438,22 @@
     hideMessage();
   });
 
+  difficultyButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var value = btn.dataset.difficulty;
+      if (value === difficulty) return;
+      applyDifficulty(value);
+      setStoredDifficulty(value);
+      updateGeometry();
+      bestScore = getBestScore();
+      updateScores();
+      newGame();
+    });
+  });
+
   window.addEventListener("resize", updateGeometry);
 
-  buildBackground();
+  applyDifficulty(getStoredDifficulty());
   updateGeometry();
   bestScore = getBestScore();
   updateScores();
