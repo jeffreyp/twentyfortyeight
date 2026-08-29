@@ -107,6 +107,37 @@ html, body {
   background: var(--accent-dark);
 }
 
+.difficulty-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.difficulty-button {
+  flex: 1;
+  background: var(--cell-bg);
+  color: var(--text);
+  border: none;
+  border-radius: var(--radius);
+  padding: 8px 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.difficulty-button .difficulty-size {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 400;
+  opacity: 0.75;
+}
+
+.difficulty-button.active {
+  background: var(--accent);
+  color: #f9f6f2;
+}
+
 .game-container {
   position: relative;
   width: 100%;
@@ -121,8 +152,8 @@ html, body {
   position: absolute;
   inset: 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(var(--size, 4), 1fr);
+  grid-template-rows: repeat(var(--size, 4), 1fr);
   gap: var(--gap);
   padding: var(--gap);
 }
@@ -156,7 +187,7 @@ html, body {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 1.9rem;
+  font-size: calc(var(--tile-size, 100px) * 0.3);
   background: #eee4da;
   color: #776e65;
 }
@@ -186,12 +217,12 @@ html, body {
 .tile-16 .tile-inner { background: #f59563; color: #f9f6f2; }
 .tile-32 .tile-inner { background: #f67c5f; color: #f9f6f2; }
 .tile-64 .tile-inner { background: #f65e3b; color: #f9f6f2; }
-.tile-128 .tile-inner { background: #edcf72; color: #f9f6f2; font-size: 1.6rem; }
-.tile-256 .tile-inner { background: #edcc61; color: #f9f6f2; font-size: 1.6rem; }
-.tile-512 .tile-inner { background: #edc850; color: #f9f6f2; font-size: 1.6rem; }
-.tile-1024 .tile-inner { background: #edc53f; color: #f9f6f2; font-size: 1.3rem; }
-.tile-2048 .tile-inner { background: #edc22e; color: #f9f6f2; font-size: 1.3rem; box-shadow: 0 0 20px 4px rgba(243, 215, 116, 0.7); }
-.tile-super .tile-inner { background: #3c3a32; color: #f9f6f2; font-size: 1.15rem; }
+.tile-128 .tile-inner { background: #edcf72; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.25); }
+.tile-256 .tile-inner { background: #edcc61; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.25); }
+.tile-512 .tile-inner { background: #edc850; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.25); }
+.tile-1024 .tile-inner { background: #edc53f; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.2); }
+.tile-2048 .tile-inner { background: #edc22e; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.2); box-shadow: 0 0 20px 4px rgba(243, 215, 116, 0.7); }
+.tile-super .tile-inner { background: #3c3a32; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.18); }
 
 .game-message {
   position: absolute;
@@ -266,19 +297,8 @@ html, body {
     font-size: 2.2rem;
   }
 
-  .tile-inner {
-    font-size: 1.4rem;
-  }
-
-  .tile-128 .tile-inner,
-  .tile-256 .tile-inner,
-  .tile-512 .tile-inner {
-    font-size: 1.15rem;
-  }
-
-  .tile-1024 .tile-inner,
-  .tile-2048 .tile-inner {
-    font-size: 0.95rem;
+  .difficulty-button {
+    font-size: 0.7rem;
   }
 
   .game-message p {
