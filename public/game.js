@@ -410,6 +410,11 @@
     { passive: false }
   );
 
+  // iOS Safari ignores user-scalable=no, so block pinch zoom page-wide.
+  ["gesturestart", "gesturechange", "gestureend"].forEach(function (type) {
+    document.addEventListener(type, function (e) { e.preventDefault(); }, { passive: false });
+  });
+
   els.gameContainer.addEventListener(
     "touchend",
     function (e) {
