@@ -21,6 +21,7 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
+  touch-action: manipulation;
 }
 
 .app {
@@ -223,6 +224,15 @@ html, body {
 .tile-1024 .tile-inner { background: #edc53f; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.2); }
 .tile-2048 .tile-inner { background: #edc22e; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.2); box-shadow: 0 0 20px 4px rgba(243, 215, 116, 0.7); }
 .tile-super .tile-inner { background: #3c3a32; color: #f9f6f2; font-size: calc(var(--tile-size, 100px) * 0.18); }
+
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
 
 .game-message {
   position: absolute;
