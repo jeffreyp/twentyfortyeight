@@ -256,6 +256,7 @@
       if (reachedWin && !won) {
         won = true;
         showMessage("You Win!", "game-won");
+        launchConfetti();
       } else {
         checkGameOver();
       }
@@ -277,6 +278,57 @@
     }
     gameOver = true;
     showMessage("Game Over!", "game-over");
+  }
+
+  function launchConfetti() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var canvas = document.createElement("canvas");
+    canvas.className = "confetti-canvas";
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext("2d");
+
+    var COLORS = ["#edc22e", "#f67c5f", "#f2b179", "#f59563", "#8f7a66", "#edc950"];
+    var pieces = [];
+    for (var i = 0; i < 150; i++) {
+      pieces.push({
+        x: canvas.width / 2 + (Math.random() - 0.5) * 80,
+        y: canvas.height * 0.4,
+        vx: (Math.random() - 0.5) * 14,
+        vy: -Math.random() * 12 - 4,
+        size: Math.random() * 6 + 4,
+        rot: Math.random() * Math.PI,
+        spin: (Math.random() - 0.5) * 0.3,
+        color: COLORS[i % COLORS.length],
+      });
+    }
+
+    var frames = 0;
+    function step() {
+      frames++;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(function (p) {
+        p.vy += 0.35;
+        p.vx *= 0.99;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.spin;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        ctx.restore();
+      });
+      if (frames < 200 && pieces.some(function (p) { return p.y < canvas.height + 20; })) {
+        window.requestAnimationFrame(step);
+      } else {
+        canvas.remove();
+      }
+    }
+    window.requestAnimationFrame(step);
   }
 
   function showMessage(text, cls) {
